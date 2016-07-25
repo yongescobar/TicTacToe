@@ -16,6 +16,7 @@ End-State: Create a (m,n,k) board game, the generalized Tic Tac Toe
 
 '''
 from tkinter import *
+from tkinter import messagebox
 from tkinter import ttk
 
 import numpy as np
@@ -28,24 +29,48 @@ def nextPlayer():
     
     playerTurn = 1 if playerTurn == 2 else 2
 
+def winGame() :
+    
+    global playerTurn
+    global gameBoard
+    
+    if messagebox.askyesno("Winner", "Player " + str(playerTurn) + " has won" + "\n" + "Restart?") :
+        playerTurn = 1
+        gameBoard = np.array([[0,0,0],[0,0,0],[0,0,0]])
+        b1["text"] = ""
+        b2["text"] = ""
+        b3["text"] = ""
+        b4["text"] = ""
+        b5["text"] = ""
+        b6["text"] = ""
+        b7["text"] = ""
+        b8["text"] = ""
+        b9["text"] = ""
+         
 def winCheck() :
     
     if (gameBoard[0][0] == gameBoard[0][1] == gameBoard[0][2] or gameBoard[0][0] == gameBoard[1][0] == gameBoard[2][0] or gameBoard[0][0] == gameBoard[1][1] == gameBoard[2][2]) and gameBoard[0][0] in (1, 2) :
-        print(playerTurn, " has won the game!")
+        winGame()
+        return True
     
     elif (gameBoard[2][0] == gameBoard[2][1] == gameBoard[2][2] or gameBoard[2][0] == gameBoard[1][1] == gameBoard[0][2]) and gameBoard[2][0] in (1, 2) :
-        print(playerTurn, "has won the game!") 
+        winGame()
+        return True
     
     elif (gameBoard[0][2] == gameBoard[1][2] == gameBoard[2][2]) and gameBoard[0][2] in (1,2) :
-        print(playerTurn, "has won the game!")
+        winGame()
+        return True
             
     elif (gameBoard[0][1] == gameBoard[1][1] == gameBoard[2][1] or gameBoard[1][0] == gameBoard[1][1] == gameBoard[1][2]) and gameBoard[1][1] in (1,2) :
-        print(playerTurn, "has won the game!")
+        winGame()
+        return True
+    
+    return False
 
 def nextTurn():
     
-    winCheck()
-    nextPlayer()
+    if(not winCheck()) :
+        nextPlayer()
 
 def pressed1() :
     
