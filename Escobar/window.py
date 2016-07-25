@@ -3,6 +3,17 @@ Created on Jul 18, 2016
 
 @author: Escobar
 
+24 Jul, 2016
+1st version of Tic Tac Toe game 3x3
+
+Future additions:
+
+- Include a computer opponent
+- Custom board size beyond 3x3
+- Custom win conditions beyond 3 in a row
+
+End-State: Create a (m,n,k) board game, the generalized Tic Tac Toe
+
 '''
 from tkinter import *
 from tkinter import ttk
