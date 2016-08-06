@@ -40,8 +40,30 @@ def runComputer() :
     global playerTurn
     global possibleSpots
     global gameBoard
+    
+    bestMove = None
+    bestValue = float("-inf")
+    
+    for spot in possibleSpots :
         
-    value, bestMove = miniMax(possibleSpots, gameBoard, 2)    
+        possibleMoves = deepcopy(possibleSpots)
+        possibleMoves.remove(spot)
+        
+        row, col = spot
+        
+        testBoard = deepcopy(gameBoard)
+        testBoard[row][col] = 2
+        
+        if winCheck(testBoard) :
+            bestMove = spot
+            break
+        else :
+            value = miniMax(possibleMoves, testBoard, 1)
+            
+            if value > bestValue :
+                bestValue = value
+                bestMove = spot
+            
     row, col = bestMove
     
     gameBoard[row][col] = 2
@@ -69,16 +91,15 @@ def miniMax(possibleMoves, board, player) :
         
         if(winCheck(testBoard)) :
             if player == 1 :
-                return -1, possibleMoves[0]
+                return -1
             else :
-                return 1, possibleMoves[0]
+                return 1
         else :
-            return 0, possibleMoves[0]
+            return 0
     
     if player == 1 :
         
         bestValue = float("inf")
-        bestMove = None 
         
         for move in possibleMoves :
                         
@@ -90,21 +111,19 @@ def miniMax(possibleMoves, board, player) :
             testBoard[row][col] = 1
             
             if winCheck(testBoard) :
-                return -1, move
+                return -1
             else :
-                value, nextMove = miniMax(nextMoves, testBoard, 2)
+                value = miniMax(nextMoves, testBoard, 2)
             
                 if value < bestValue :
                     bestValue = value
-                    bestMove = move
                          
-        return bestValue, bestMove
+        return bestValue
     
     if player == 2 :
         
         bestValue = float("-inf")
-        bestMove = None 
-
+        
         for move in possibleMoves :
             
             row, col = move
@@ -115,15 +134,14 @@ def miniMax(possibleMoves, board, player) :
             testBoard[row][col] = 2
             
             if winCheck(testBoard) :
-                return 1, move 
+                return 1
             else :
-                value, nextMove = miniMax(nextMoves, testBoard, 1)
+                value = miniMax(nextMoves, testBoard, 1)
 
                 if value > bestValue :
                     bestValue = value
-                    bestMove = move
     
-        return bestValue, bestMove  
+        return bestValue
     
 def nextPlayer():
     global playerTurn
@@ -223,9 +241,9 @@ def pressed(button):
     if(playerTurn == 1 ) :
         button["text"] = "X"
         gameBoard[row][column] = 1
-    else :
-        button["text"] = "O"
-        gameBoard[row][column] = 2
+    #else :
+     #   button["text"] = "O"
+     #   gameBoard[row][column] = 2
     
     possibleSpots.remove([row, column])
 
