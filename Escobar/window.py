@@ -41,9 +41,7 @@ def runComputer() :
     global possibleSpots
     global gameBoard
         
-    value, bestMove = miniMax(possibleSpots, gameBoard, 2)
-    print(value, bestMove)
-    
+    value, bestMove = miniMax(possibleSpots, gameBoard, 2)    
     row, col = bestMove
     
     gameBoard[row][col] = 2
@@ -79,11 +77,11 @@ def miniMax(possibleMoves, board, player) :
     
     if player == 1 :
         
-        bestValue = float("-inf")
+        bestValue = float("inf")
         bestMove = None 
         
         for move in possibleMoves :
-            
+                        
             row, col = move
             testBoard = deepcopy(board)
             nextMoves = deepcopy(possibleMoves)
@@ -96,17 +94,17 @@ def miniMax(possibleMoves, board, player) :
             else :
                 value, nextMove = miniMax(nextMoves, testBoard, 2)
             
-                if value > bestValue :
+                if value < bestValue :
                     bestValue = value
-                    bestMove = nextMove
-        
+                    bestMove = move
+                         
         return bestValue, bestMove
     
     if player == 2 :
         
-        bestValue = float("inf")
+        bestValue = float("-inf")
         bestMove = None 
-        
+
         for move in possibleMoves :
             
             row, col = move
@@ -120,11 +118,11 @@ def miniMax(possibleMoves, board, player) :
                 return 1, move 
             else :
                 value, nextMove = miniMax(nextMoves, testBoard, 1)
-            
-                if value < bestValue :
+
+                if value > bestValue :
                     bestValue = value
-                    bestMove = nextMove
-        
+                    bestMove = move
+    
         return bestValue, bestMove  
     
 def nextPlayer():
@@ -146,6 +144,26 @@ def winGame() :
     global possibleSpots
     
     if messagebox.askyesno("Winner", "Player " + str(playerTurn) + " has won" + "\n" + "Restart?") :
+        playerTurn = 1
+        gameBoard = np.array([[0,0,0],[0,0,0],[0,0,0]])
+        possibleSpots = [[0,0],[0,1],[0,2],[1,0],[1,1],[1,2],[2,0],[2,1],[2,2]]
+        b1["text"] = ""
+        b2["text"] = ""
+        b3["text"] = ""
+        b4["text"] = ""
+        b5["text"] = ""
+        b6["text"] = ""
+        b7["text"] = ""
+        b8["text"] = ""
+        b9["text"] = ""
+
+def drawGame() :
+    
+    global playerTurn
+    global gameBoard
+    global possibleSpots
+    
+    if messagebox.askyesno("Draw", "Draw" + "\n" + "Restart?") :
         playerTurn = 1
         gameBoard = np.array([[0,0,0],[0,0,0],[0,0,0]])
         possibleSpots = [[0,0],[0,1],[0,2],[1,0],[1,1],[1,2],[2,0],[2,1],[2,2]]
@@ -181,9 +199,12 @@ def winCheck(board) :
 #Calls winCheck to see if the current player has won; else moves onto the next Player
 def nextTurn():
     
+    global possibleSpots
     #if the current player did not win, then move onto the next player
     if(winCheck(gameBoard)) :
         winGame()
+    elif len(possibleSpots) == 0 :
+        drawGame()
     else :
         nextPlayer()
     
@@ -199,8 +220,6 @@ def pressed(button):
     row = int(buttonInfo["row"]) - 1
     column = int(buttonInfo["column"]) - 1
     
-    print(row, column)
-
     if(playerTurn == 1 ) :
         button["text"] = "X"
         gameBoard[row][column] = 1
